@@ -5,6 +5,9 @@ module.exports = {
   entry: path.resolve(__dirname, './src/index.ts'),
   mode: 'development',
   devtool: 'inline-source-map',
+  experiments: {
+    topLevelAwait: true,
+  },
   module: {
     rules: [
       {

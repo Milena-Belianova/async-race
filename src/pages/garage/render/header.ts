@@ -1,23 +1,15 @@
+import { createButtonElement } from '../../../components/renderComponents';
+
 export const createHeaderFragment = (): DocumentFragment => {
   const fragment: DocumentFragment = document.createDocumentFragment();
 
-  const header: HTMLDivElement = document.createElement('div');
+  const header: HTMLElement = document.createElement('header');
   header.className = 'header';
 
-  const toGarageBtn: HTMLButtonElement = document.createElement('button');
-  toGarageBtn.id = 'toGarage';
-  toGarageBtn.className = 'button button_color-green';
-  toGarageBtn.textContent = 'TO GARAGE';
-  // toGarageBtn.addEventListener('click', showGaragePage);
-
-  const toWinnersBtn: HTMLButtonElement = document.createElement('button');
-  toWinnersBtn.id = 'toWinners';
-  toWinnersBtn.className = 'button button_color-green';
-  toWinnersBtn.textContent = 'TO WINNERS';
-  // toGarageBtn.addEventListener('click', showWinnersPage);
+  const toGarageBtn = createButtonElement({ id: 'toGarage', className: 'button button_color-green', textContent: 'TO GARAGE' });
+  const toWinnersBtn = createButtonElement({ id: 'toWinners', className: 'button button_color-green', textContent: 'TO WINNERS' });
 
   header.append(toGarageBtn, toWinnersBtn);
-
   fragment.append(header);
   return fragment;
 };
