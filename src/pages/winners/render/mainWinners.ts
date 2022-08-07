@@ -1,42 +1,25 @@
-import { state } from '../../..';
+import {
+  WinsCars,
+} from '../../../components/api';
 import { createButtonElement } from '../../../components/renderComponents';
+import { state } from '../../../index';
 import { goNextPage, goPrevPage } from '../../../utils/switchPage';
 
-type Car = {
-  name: string;
-  color: string;
-};
+const createTableRow = ({
+  id, wins, time, car,
+}: WinsCars): HTMLTableRowElement => {
+  const tableRow: HTMLTableRowElement = document.createElement('tr');
 
-export const createCarFragment = ({ name, color }: Car): DocumentFragment => {
-  const fragment: DocumentFragment = document.createDocumentFragment();
+  const tableNumSell: HTMLTableCellElement = document.createElement('td');
+  tableNumSell.className = 'table__sell';
+  tableNumSell.textContent = `${id}`;
 
-  const carWrapper: HTMLDivElement = document.createElement('div');
-  carWrapper.className = 'car-wrapper';
+  const tableCarSell: HTMLTableCellElement = document.createElement('td');
+  tableCarSell.className = 'table__sell';
 
-  // FIRST ROW
-  const firstRow: HTMLDivElement = document.createElement('div');
-  firstRow.className = 'car-wrapper__btns-name-row';
-
-  const selectBtn = createButtonElement({ id: 'selectBtn', className: 'button', textContent: 'SELECT' });
-  const removeBtn = createButtonElement({ id: 'removeBtn', className: 'button', textContent: 'REMOVE' });
-
-  const carName: HTMLDivElement = document.createElement('div');
-  carName.className = 'car-name';
-  carName.textContent = `${name}`;
-
-  // SECOND ROW
-  const secondRow: HTMLDivElement = document.createElement('div');
-  secondRow.className = 'car-wrapper__car-row';
-
-  const aBtn = createButtonElement({
-    id: 'aBtn', className: 'button engine__button', textContent: 'A', attr: { name: 'value', value: 'А' },
-  });
-  const bBtn = createButtonElement({
-    id: 'bBtn', className: 'button engine__button', textContent: 'B', attr: { name: 'disabled', value: 'disabled' },
-  });
+  const { name, color } = car;
   const carSvgDiv: HTMLDivElement = document.createElement('div');
-  carSvgDiv.className = 'car-wrapper__car-svg';
-  carSvgDiv.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="80px" height="80px" viewBox="0 0 256 256" xml:space="preserve">
+  carSvgDiv.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="50px" height="50px" viewBox="0 0 256 256" xml:space="preserve">
   <defs>
   </defs>
   <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >
@@ -47,60 +30,74 @@ export const createCarFragment = ({ name, color }: Car): DocumentFragment => {
     <path d="M 19.939 60.086 c -4.237 0 -7.684 -3.447 -7.684 -7.684 c 0 -4.237 3.447 -7.685 7.684 -7.685 s 7.684 3.447 7.684 7.685 C 27.623 56.639 24.176 60.086 19.939 60.086 z M 19.939 47.718 c -2.583 0 -4.684 2.102 -4.684 4.685 s 2.101 4.684 4.684 4.684 c 2.583 0 4.684 -2.101 4.684 -4.684 S 22.521 47.718 19.939 47.718 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: ${color}; fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
   </g>
   </svg>`;
+  tableCarSell.append(carSvgDiv);
 
-  const flagSvgDiv: HTMLDivElement = document.createElement('div');
-  flagSvgDiv.className = 'car-wrapper__flag-svg';
-  const flagColor = 'rgb(208, 27, 27)';
-  flagSvgDiv.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="40px" height="65px" viewBox="0 0 256 256" xml:space="preserve">
-  <defs>
-  </defs>
-  <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >
-    <path d="M 63.167 54.933 c -5.391 0 -10.782 -1.03 -16.136 -3.091 c -9.751 -3.754 -19.642 -3.754 -29.396 0 c -0.614 0.238 -1.306 0.156 -1.85 -0.218 c -0.543 -0.373 -0.868 -0.989 -0.868 -1.648 V 9.025 c 0 -0.827 0.509 -1.569 1.282 -1.867 c 10.707 -4.121 21.563 -4.121 32.27 0 c 9.753 3.754 19.644 3.754 29.396 0 c 0.614 -0.237 1.308 -0.155 1.851 0.218 c 0.544 0.373 0.868 0.99 0.868 1.649 v 40.95 c 0 0.827 -0.51 1.569 -1.281 1.866 C 73.949 53.902 68.558 54.933 63.167 54.933 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: ${flagColor}; fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
-    <path d="M 18.917 88 c 0 1.104 -0.896 2 -2 2 s -2 -0.896 -2 -2 V 2 c 0 -1.104 0.896 -2 2 -2 s 2 0.896 2 2" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: ${flagColor}; fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
-    <path d="M 22.021 90 H 11.814 c -1.104 0 -2 -0.896 -2 -2 s 0.896 -2 2 -2 h 10.207 c 1.104 0 2 0.896 2 2 S 23.125 90 22.021 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: ${flagColor}; fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
-  </g>
-  </svg>`;
+  const tableNameSell: HTMLTableCellElement = document.createElement('td');
+  tableNameSell.className = 'table__sell';
+  tableNameSell.textContent = `${name}`;
 
-  firstRow.append(selectBtn, removeBtn, carName);
-  secondRow.append(aBtn, bBtn, carSvgDiv, flagSvgDiv);
-  carWrapper.append(firstRow, secondRow);
-  fragment.append(carWrapper);
-  return fragment;
+  const tableWinsSell: HTMLTableCellElement = document.createElement('td');
+  tableWinsSell.className = 'table__sell';
+  tableWinsSell.textContent = `${wins}`;
+
+  const tableTimeSell: HTMLTableCellElement = document.createElement('td');
+  tableTimeSell.className = 'table__sell';
+  tableTimeSell.textContent = `${time}`;
+
+  tableRow.append(tableNumSell, tableCarSell, tableNameSell, tableWinsSell, tableTimeSell);
+  return tableRow;
 };
 
-export const createCarsBlockFragment = (): DocumentFragment => {
+export const createMainWinnersFragment = (): DocumentFragment => {
   const fragment: DocumentFragment = document.createDocumentFragment();
 
-  const carsContainer: HTMLDivElement = document.createElement('div');
-  carsContainer.className = 'cars-container';
+  const main: HTMLElement = document.createElement('main');
+  main.className = 'main';
+
+  const winnersContainer: HTMLDivElement = document.createElement('div');
+  winnersContainer.className = 'winners-container';
 
   const heading: HTMLHeadingElement = document.createElement('h2');
   heading.className = 'heading';
-  heading.textContent = 'Garage ';
-  const carsAmount: HTMLSpanElement = document.createElement('span');
-  carsAmount.id = 'carsAmount';
-  carsAmount.className = 'heading__span';
-  carsAmount.textContent = `(${state.carsCount})`;
-  heading.append(carsAmount);
+  heading.textContent = 'Winners ';
+  const winnersAmount: HTMLSpanElement = document.createElement('span');
+  winnersAmount.id = 'winnersAmount';
+  winnersAmount.className = 'heading__span';
+  winnersAmount.textContent = `(${state.winnersCount})`;
+  heading.append(winnersAmount);
 
   const page: HTMLHeadingElement = document.createElement('h3');
   page.className = 'page';
   page.textContent = 'Page #';
   const pageNumber: HTMLSpanElement = document.createElement('span');
-  pageNumber.id = 'pageNumber';
+  pageNumber.id = 'pageWinnersNumber';
   pageNumber.className = 'page__span';
-  pageNumber.textContent = `(${state.carsPage})`;
+  pageNumber.textContent = `(${state.winnersPage})`;
   page.append(pageNumber);
 
-  const carFragments = state.cars!.map(createCarFragment);
+  // Table
+  const table: HTMLTableElement = document.createElement('table');
+  table.className = 'table';
+  const tableHeadingRow: HTMLTableRowElement = document.createElement('tr');
+
+  const tableHeadingName = ['№', 'Car', 'Name', 'Wins', 'Best time (sec)'];
+  for (let i = 0; i < 5; i += 1) {
+    const tableHeadingSell: HTMLTableCellElement = document.createElement('th');
+    tableHeadingSell.className = 'table__sell table__heading-sell';
+    tableHeadingSell.textContent = tableHeadingName[i];
+    tableHeadingRow.append(tableHeadingSell);
+  }
+
+  const tableRows = state.winners!.map(createTableRow);
+  table.append(tableHeadingRow, ...tableRows);
 
   const paginationBtnContainer: HTMLDivElement = document.createElement('div');
   paginationBtnContainer.className = 'pagination-container';
   const prevBtn = createButtonElement({
-    id: 'prevBtn', className: 'button button_color-green', textContent: 'PREV', attr: { name: 'disabled', value: 'disabled' },
+    id: 'prevWinBtn', className: 'button button_color-green', textContent: 'PREV', attr: { name: 'disabled', value: 'disabled' },
   });
 
-  if (state.carsPage === 1) {
+  if (state.winnersPage === 1) {
     if (!prevBtn.getAttribute('disabled')) {
       prevBtn.setAttribute('disabled', 'disabled');
       prevBtn.removeEventListener('click', () => goPrevPage());
@@ -111,10 +108,10 @@ export const createCarsBlockFragment = (): DocumentFragment => {
   }
 
   const nextBtn = createButtonElement({
-    id: 'nextBtn', className: 'button button_color-green', textContent: 'NEXT', attr: { name: 'disabled', value: 'disabled' },
+    id: 'nextWinBtn', className: 'button button_color-green', textContent: 'NEXT', attr: { name: 'disabled', value: 'disabled' },
   });
 
-  if (state.carsPage === state.maxCarPages) {
+  if (state.winnersPage === state.maxWinnersPages) {
     if (!nextBtn.getAttribute('disabled')) {
       nextBtn.setAttribute('disabled', 'disabled');
       nextBtn.removeEventListener('click', () => goNextPage());
@@ -125,7 +122,8 @@ export const createCarsBlockFragment = (): DocumentFragment => {
   }
 
   paginationBtnContainer.append(prevBtn, nextBtn);
-  carsContainer.append(heading, page, ...carFragments, paginationBtnContainer);
-  fragment.append(carsContainer);
+  winnersContainer.append(heading, page, table, paginationBtnContainer);
+  main.append(winnersContainer, paginationBtnContainer);
+  fragment.append(main);
   return fragment;
 };

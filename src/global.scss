@@ -78,7 +78,8 @@ body {
   }
 }
 
-.cars-container {
+.cars-container,
+.winners-container {
   color: white;
   padding-top: 3rem;
 
@@ -90,14 +91,10 @@ body {
     font-size: 1.2rem;
     padding: 0.5rem 0;
   }
+}
 
-  .pagination-container {
-    color: $base-dark;
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 2rem;
-  }
+.winners-container {
+  padding-top: 0;
 }
 
 .car-wrapper {
@@ -148,5 +145,31 @@ body {
       margin-left: auto;
       margin-right: 8rem;
     }
+  }
+}
+
+.pagination-container {
+  color: $base-dark;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.table {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 1.5rem;
+
+  .table__sell {
+    padding: 0 1rem;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .table__heading-sell {
+    padding: 0.3rem 1rem;
+    font-weight: 600;
+    background-color: rgb(75, 75, 235);
   }
 }

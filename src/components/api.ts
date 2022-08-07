@@ -36,6 +36,18 @@ export type WinsBody = {
   time: number,
 }
 
+export type WinsCars = {
+  id: number,
+  wins: number,
+  time: number,
+  car: Car,
+}
+
+export type WinsWithCount = {
+  items: Array<WinsCars>,
+  count: number,
+}
+
 export const getCars = async (page: number, limit = 7): Promise<CarsWithCount> => {
   const response = await fetch(`${garage}?_page=${page}&_limit=${limit}`);
 
@@ -74,6 +86,33 @@ export const stopEngine = async (id: number): Promise<Engine> => (await fetch(`$
 export const drive = async (id: number): Promise<{success: boolean}> => {
   const response = await fetch(`${engine}?id=${id}&status=drive`).catch();
   return response.status !== 200 ? { success: false } : { ...(await response.json()) };
+};
+
+const getSortOrder = (sort: ['id'|'wins'|'time'] | undefined, order: ['ASC'|'DESC'] | undefined): string => {
+  if (sort && order) {
+    return `&_sort=${sort}&_order=${order}`;
+  }
+  return '';
+};
+
+export type GetWinnersParams = {
+  page: number,
+  limit?: number,
+  sort?: ['id'|'wins'|'time'],
+  order?: ['ASC'|'DESC'],
+}
+
+export const getWinners = async ({
+  page, limit = 10, sort, order,
+}: GetWinnersParams): Promise<WinsWithCount> => {
+  const response = await fetch(`${winners}?_page=${page}&_limit=${limit}${getSortOrder(sort, order)}`);
+  const items: Array<Wins> = await response.json();
+
+  return {
+    items: await Promise.all(items.map(async (winner) => (
+      { ...winner, car: await getCar(winner.id) }))),
+    count: Number(response.headers.get('X-Total-Count')),
+  };
 };
 
 export const getWinner = async (id: number): Promise<Wins> => (await fetch(`${winners}/${id}`)).json();

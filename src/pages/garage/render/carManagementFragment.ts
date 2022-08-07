@@ -1,4 +1,4 @@
-import { render, state } from '../../..';
+import { render, state } from '../../../index';
 import { createButtonElement, createInputElement } from '../../../components/renderComponents';
 import { generateCars } from '../../../utils/generateCars';
 
