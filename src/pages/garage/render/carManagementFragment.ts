@@ -9,6 +9,7 @@ import {
   updateSelectedCarStateName,
 } from '../../../utils/selectCar';
 import { createNewCar } from '../../../utils/createCar';
+import { onRaceBtnClick, onResetBtnClick } from '../../../utils/raceReset';
 
 export const createCarManagementFragment = (): DocumentFragment => {
   const fragment: DocumentFragment = document.createDocumentFragment();
@@ -20,7 +21,10 @@ export const createCarManagementFragment = (): DocumentFragment => {
   const createInput = createInputElement({ id: 'createInput', type: 'text', className: 'input' });
   createInput.addEventListener('change', () => updateCreateCarState());
   const createInputColor = createInputElement({
-    id: 'createInputColor', type: 'color', className: 'input_type-color', attr: { name: 'value', value: '#ffffff' },
+    id: 'createInputColor',
+    type: 'color',
+    className: 'input_type-color',
+    attr: { name: 'value', value: '#ffffff' },
   });
   createInputColor.addEventListener('change', () => updateCreateCarState());
   if (state.creatingCar) {
@@ -32,7 +36,10 @@ export const createCarManagementFragment = (): DocumentFragment => {
   const updateInput = createInputElement({ id: 'updateInput', type: 'text', className: 'input update__input' });
   updateInput.addEventListener('change', () => updateSelectedCarStateName());
   const updateInputColor = createInputElement({
-    id: 'updateInputColor', type: 'color', className: 'input_type-color update__input', attr: { name: 'value', value: '#ffffff' },
+    id: 'updateInputColor',
+    type: 'color',
+    className: 'input_type-color update__input',
+    attr: { name: 'value', value: '#ffffff' },
   });
   updateInputColor.addEventListener('change', () => updateSelectedCarStateColor());
   if (state.selectedCar) {
@@ -46,9 +53,23 @@ export const createCarManagementFragment = (): DocumentFragment => {
   const updateBtn = createButtonElement({ id: 'updateBtn', className: 'button', textContent: 'UPDATE' });
   updateBtn.addEventListener('click', () => updateSelectedCar());
 
+  // Race, Reset, Generate Cars Btns
   const raceBtn = createButtonElement({ id: 'raceBtn', className: 'button button_color-green', textContent: 'RACE' });
-  const resetBtn = createButtonElement({ id: 'resetBtn', className: 'button button_color-green', textContent: 'RESET' });
-  const generateCarsBtn = createButtonElement({ id: 'generateCarsBtn', className: 'button', textContent: 'GENERATE CARS' });
+  const resetBtn = createButtonElement({
+    id: 'resetBtn',
+    className: 'button button_color-green',
+    textContent: 'RESET',
+    attr: { name: 'disabled', value: 'disabled' },
+  });
+  raceBtn.addEventListener('click', () => onRaceBtnClick());
+  resetBtn.addEventListener('click', () => onResetBtnClick());
+
+  // Generate cars
+  const generateCarsBtn = createButtonElement({
+    id: 'generateCarsBtn',
+    className: 'button',
+    textContent: 'GENERATE CARS',
+  });
   generateCarsBtn.addEventListener('click', async () => {
     generateCars();
     await state.loadCars();

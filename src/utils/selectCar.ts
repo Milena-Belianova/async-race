@@ -1,11 +1,11 @@
-import { state } from '..';
+import { state, updateState } from '../index';
 
 export const selectCar = (id: number, name: string, color: string): void => {
   const updateInput = document.getElementById('updateInput') as HTMLInputElement;
   const updateInputColor = document.getElementById('updateInputColor') as HTMLInputElement;
   updateInput.value = name;
   updateInputColor.setAttribute('value', `${color}`);
-  state.selectedCar = { id, name, color };
+  updateState({ selectedCar: { id, name, color } });
 };
 
 export const updateSelectedCarStateName = (): void => {
@@ -13,7 +13,7 @@ export const updateSelectedCarStateName = (): void => {
   if (selectedCar) {
     const updateInput = document.getElementById('updateInput') as HTMLInputElement;
     const newName = updateInput.value;
-    selectedCar.name = newName;
+    updateState({ selectedCar: { ...selectedCar, name: newName } });
   }
 };
 
@@ -22,7 +22,7 @@ export const updateSelectedCarStateColor = (): void => {
   if (selectedCar) {
     const updateInputColor = document.getElementById('updateInputColor') as HTMLInputElement;
     const newColor = updateInputColor.value;
-    selectedCar.color = newColor;
+    updateState({ selectedCar: { ...selectedCar, color: newColor } });
   }
 };
 
@@ -31,5 +31,5 @@ export const updateCreateCarState = (): void => {
   const createInputColor = document.getElementById('createInputColor') as HTMLInputElement;
   const newName = createInput.value;
   const newColor = createInputColor.value;
-  state.creatingCar = { name: newName, color: newColor };
+  updateState({ creatingCar: { name: newName, color: newColor } });
 };

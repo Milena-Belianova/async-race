@@ -1,6 +1,5 @@
 import { createCar } from '../components/api';
-import { state } from '../index';
-import { renderGaragePage } from '../pages/garage/render/renderGaragePage';
+import { updateState } from '../index';
 
 export const createNewCar = async (): Promise<void> => {
   const createInput = document.getElementById('createInput') as HTMLInputElement;
@@ -8,7 +7,5 @@ export const createNewCar = async (): Promise<void> => {
   const newName = createInput.value;
   const newColor = createInputColor.value;
   createCar({ name: newName, color: newColor });
-  state.creatingCar = undefined;
-  await state.loadCars();
-  renderGaragePage();
+  updateState({ creatingCar: undefined });
 };

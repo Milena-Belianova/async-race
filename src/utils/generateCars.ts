@@ -78,7 +78,7 @@ const RGBToHex = (r: number, g: number, b: number): string => {
   return `#${rr}${gg}${bb}`;
 };
 
-export const generateCars = (amount = 10): Array<Promise<Car>> => {
+export const generateCars = (amount = 100): Array<Promise<Car>> => {
   const resArray: Array<Promise<Car>> = [];
   for (let i = 0; i < amount; i += 1) {
     const carName = `${carBrands[Math.floor(Math.random() * carBrands.length)]} ${carModels[Math.floor(Math.random() * carModels.length)]}`;

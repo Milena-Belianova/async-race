@@ -121,7 +121,6 @@ body {
     border-bottom: 1px dashed white;
     display: flex;
     gap: 0.35rem;
-    // padding-bottom: 0.2rem;
 
     .engine__button {
       background-color: transparent;
@@ -137,8 +136,13 @@ body {
       }
     }
 
+    .engine__button_b {
+      border: 1px solid rgb(208, 27, 27);
+    }
+
     .car-wrapper__car-svg {
       margin-left: 1rem;
+      position: relative;
     }
 
     .car-wrapper__flag-svg {
@@ -172,4 +176,15 @@ body {
     font-weight: 600;
     background-color: rgb(75, 75, 235);
   }
+}
+
+.win-message {
+  position: absolute;
+  top: 50%;
+  margin-top: -2.18rem;
+  left: 50%;
+  margin-left: -13rem;
+  padding: 1rem;
+  font-size: 2rem;
+  text-shadow: 5px 5px 10px #00FF00, -5px -5px 10px #00FF00;
 }

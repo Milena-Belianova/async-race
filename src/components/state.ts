@@ -14,6 +14,8 @@ export class State {
   winnersCount = 1;
   selectedCar: Car | undefined;
   creatingCar: CarBody | undefined;
+  view: 'garage' | 'winners' = 'garage';
+  race = false;
 
   async loadCars(): Promise<void> {
     const { items, count } = await getCars(this.carsPage);

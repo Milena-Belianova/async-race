@@ -4,14 +4,16 @@ import { createButtonElement } from '../../../components/renderComponents';
 import { removeCar } from '../../../utils/removeCar';
 import { selectCar } from '../../../utils/selectCar';
 import { goNextPage, goPrevPage } from '../../../utils/switchPage';
+import { onEngineStartBtnClick, onEngineStopBtnClick } from '../../../utils/startStopEngine';
 
 export const createCarFragment = ({ id, name, color }: Car): DocumentFragment => {
   const fragment: DocumentFragment = document.createDocumentFragment();
 
   const carWrapper: HTMLDivElement = document.createElement('div');
+  carWrapper.id = `carWrapper${id}`;
   carWrapper.className = 'car-wrapper';
 
-  // FIRST ROW
+  // FIRST ROW - Select, Remove, Car name
   const firstRow: HTMLDivElement = document.createElement('div');
   firstRow.className = 'car-wrapper__btns-name-row';
 
@@ -24,17 +26,22 @@ export const createCarFragment = ({ id, name, color }: Car): DocumentFragment =>
   carName.className = 'car-name';
   carName.textContent = `${name}`;
 
-  // SECOND ROW
+  // SECOND ROW - A, B, Svg, Flag
   const secondRow: HTMLDivElement = document.createElement('div');
   secondRow.className = 'car-wrapper__car-row';
 
   const aBtn = createButtonElement({
-    id: 'aBtn', className: 'button engine__button', textContent: 'A', attr: { name: 'value', value: 'А' },
+    id: `aBtn${id}`, className: 'button engine__button', textContent: 'A', attr: { name: 'value', value: 'А' },
   });
+  aBtn.addEventListener('click', () => onEngineStartBtnClick(id, name));
+
   const bBtn = createButtonElement({
-    id: 'bBtn', className: 'button engine__button', textContent: 'B', attr: { name: 'disabled', value: 'disabled' },
+    id: `bBtn${id}`, className: 'button engine__button engine__button_b', textContent: 'B', attr: { name: 'disabled', value: 'disabled' },
   });
+  bBtn.addEventListener('click', () => onEngineStopBtnClick(id));
+
   const carSvgDiv: HTMLDivElement = document.createElement('div');
+  carSvgDiv.id = `divSvg${id}`;
   carSvgDiv.className = 'car-wrapper__car-svg';
   carSvgDiv.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="80px" height="80px" viewBox="0 0 256 256" xml:space="preserve">
   <defs>
@@ -94,6 +101,11 @@ export const createCarsBlockFragment = (): DocumentFragment => {
 
   const carFragments = state.cars!.map(createCarFragment);
 
+  // Win message container
+  const winMessage: HTMLDivElement = document.createElement('div');
+  winMessage.id = 'winMessage';
+  winMessage.className = 'win-message';
+
   const paginationBtnContainer: HTMLDivElement = document.createElement('div');
   paginationBtnContainer.className = 'pagination-container';
   const prevBtn = createButtonElement({
@@ -125,7 +137,7 @@ export const createCarsBlockFragment = (): DocumentFragment => {
   }
 
   paginationBtnContainer.append(prevBtn, nextBtn);
-  carsContainer.append(heading, page, ...carFragments, paginationBtnContainer);
+  carsContainer.append(heading, page, ...carFragments, paginationBtnContainer, winMessage);
   fragment.append(carsContainer);
   return fragment;
 };
