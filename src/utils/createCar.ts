@@ -1,5 +1,5 @@
 import { createCar } from '../components/api';
-import { updateState } from '../index';
+import { loadCars, updateState } from '../index';
 
 export const createNewCar = async (): Promise<void> => {
   const createInput = document.getElementById('createInput') as HTMLInputElement;
@@ -7,5 +7,6 @@ export const createNewCar = async (): Promise<void> => {
   const newName = createInput.value;
   const newColor = createInputColor.value;
   createCar({ name: newName, color: newColor });
+  loadCars();
   updateState({ creatingCar: undefined });
 };

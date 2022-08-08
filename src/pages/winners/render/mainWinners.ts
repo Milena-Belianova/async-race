@@ -3,18 +3,19 @@ import {
 } from '../../../components/api';
 import { createButtonElement } from '../../../components/renderComponents';
 import { state } from '../../../index';
+import { onBestTimeSortBtnClick, onWinsSortBtnClick } from '../../../utils/sortWinners';
 import {
   goNextWinPage, goPrevWinPage,
 } from '../../../utils/switchPage';
 
 const createTableRow = ({
-  id, wins, time, car,
-}: WinsCars): HTMLTableRowElement => {
+  wins, time, car,
+}: WinsCars, index: number): HTMLTableRowElement => {
   const tableRow: HTMLTableRowElement = document.createElement('tr');
 
   const tableNumSell: HTMLTableCellElement = document.createElement('td');
   tableNumSell.className = 'table__sell';
-  tableNumSell.textContent = `${id}`;
+  tableNumSell.textContent = `${10 * (state.winnersPage - 1) + index + 1}`;
 
   const tableCarSell: HTMLTableCellElement = document.createElement('td');
   tableCarSell.className = 'table__sell';
@@ -44,7 +45,7 @@ const createTableRow = ({
 
   const tableTimeSell: HTMLTableCellElement = document.createElement('td');
   tableTimeSell.className = 'table__sell';
-  tableTimeSell.textContent = `${time}`;
+  tableTimeSell.textContent = `${time.toFixed(2)}`;
 
   tableRow.append(tableNumSell, tableCarSell, tableNameSell, tableWinsSell, tableTimeSell);
   return tableRow;
@@ -87,6 +88,26 @@ export const createMainWinnersFragment = (): DocumentFragment => {
     const tableHeadingSell: HTMLTableCellElement = document.createElement('th');
     tableHeadingSell.className = 'table__sell table__heading-sell';
     tableHeadingSell.textContent = tableHeadingName[i];
+
+    if (tableHeadingName[i] === 'Wins') {
+      if ((state.order?.[0] === 'ASC') && (state.sort?.[0] === 'wins')) {
+        tableHeadingSell.innerHTML = 'Wins &darr;';
+      } else if (state.order?.[0] === 'DESC' && state.sort?.[0] === 'wins') {
+        tableHeadingSell.innerHTML = 'Wins &uarr;';
+      }
+      tableHeadingSell.id = 'winsSort';
+      tableHeadingSell.addEventListener('click', () => onWinsSortBtnClick());
+    }
+
+    if (tableHeadingName[i] === 'Best time (sec)') {
+      if ((state.order?.[0] === 'ASC') && (state.sort?.[0] === 'time')) {
+        tableHeadingSell.innerHTML = 'Best time (sec) &darr;';
+      } else if (state.order?.[0] === 'DESC' && state.sort?.[0] === 'time') {
+        tableHeadingSell.innerHTML = 'Best time (sec) &uarr;';
+      }
+      tableHeadingSell.id = 'bestTime';
+      tableHeadingSell.addEventListener('click', () => onBestTimeSortBtnClick());
+    }
     tableHeadingRow.append(tableHeadingSell);
   }
 

@@ -71,9 +71,9 @@ const RGBToHex = (r: number, g: number, b: number): string => {
   let gg = g.toString(16);
   let bb = b.toString(16);
 
-  if (rr.length === 1) { rr = `0${r}`; }
-  if (gg.length === 1) { gg = `0${g}`; }
-  if (bb.length === 1) { bb = `0${b}`; }
+  if (rr.length === 1) { rr = `0${rr}`; }
+  if (gg.length === 1) { gg = `0${gg}`; }
+  if (bb.length === 1) { bb = `0${bb}`; }
 
   return `#${rr}${gg}${bb}`;
 };

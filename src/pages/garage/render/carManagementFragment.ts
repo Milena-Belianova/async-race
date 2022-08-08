@@ -1,7 +1,6 @@
-import { state } from '../../../index';
+import { loadCars, state } from '../../../index';
 import { createButtonElement, createInputElement } from '../../../components/renderComponents';
 import { generateCars } from '../../../utils/generateCars';
-import { renderGaragePage } from './renderGaragePage';
 import { updateSelectedCar } from '../../../utils/updateSelectedCar';
 import {
   updateCreateCarState,
@@ -71,9 +70,8 @@ export const createCarManagementFragment = (): DocumentFragment => {
     textContent: 'GENERATE CARS',
   });
   generateCarsBtn.addEventListener('click', async () => {
-    generateCars();
-    await state.loadCars();
-    renderGaragePage();
+    await Promise.all(generateCars());
+    await loadCars();
   });
 
   carManagementContainer.append(

@@ -1,6 +1,6 @@
 /* eslint-disable lines-between-class-members */
 import {
-  Car, CarBody, getCars, getWinners, WinsCars,
+  Car, CarBody, WinsCars,
 } from './api';
 
 export class State {
@@ -16,18 +16,6 @@ export class State {
   creatingCar: CarBody | undefined;
   view: 'garage' | 'winners' = 'garage';
   race = false;
-
-  async loadCars(): Promise<void> {
-    const { items, count } = await getCars(this.carsPage);
-    this.cars = items;
-    this.carsCount = count;
-    this.maxCarPages = Math.ceil(this.carsCount / 7);
-  }
-
-  async loadWinners(): Promise<void> {
-    const { items, count } = await getWinners({ page: this.winnersPage });
-    this.winners = items;
-    this.winnersCount = count;
-    this.maxWinnersPages = Math.ceil(this.winnersCount / 7);
-  }
+  sort: ['id' | 'wins' | 'time'] | undefined = undefined;
+  order: ['ASC' | 'DESC'] | undefined = undefined;
 }

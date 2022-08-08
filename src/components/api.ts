@@ -149,7 +149,7 @@ export const createWinner = async (body: Wins): Promise<Wins> => (
 ).json();
 
 export const updateWinner = async (id: number, body: WinsBody): Promise<Wins> => (
-  await fetch(`${garage}/${id}`, {
+  await fetch(`${winners}/${id}`, {
     method: 'PUT',
     body: JSON.stringify(body),
     headers: {

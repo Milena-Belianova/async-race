@@ -1,6 +1,5 @@
-import { state } from '../index';
+import { loadCars } from '../index';
 import { deleteCar, deleteWinner, getWinner } from '../components/api';
-import { renderGaragePage } from '../pages/garage/render/renderGaragePage';
 
 export const removeCar = async (id: number): Promise<void> => {
   deleteCar(id);
@@ -9,6 +8,5 @@ export const removeCar = async (id: number): Promise<void> => {
     deleteWinner(id);
   }
 
-  await state.loadCars();
-  renderGaragePage();
+  await loadCars();
 };

@@ -1,6 +1,5 @@
 import { updateCar } from '../components/api';
-import { state } from '../index';
-import { renderGaragePage } from '../pages/garage/render/renderGaragePage';
+import { loadCars, state, updateState } from '../index';
 
 export const updateSelectedCar = async (): Promise<void> => {
   const { selectedCar } = state;
@@ -11,7 +10,6 @@ export const updateSelectedCar = async (): Promise<void> => {
     const newColor = updateInputColor.value;
     updateCar(selectedCar?.id, { name: newName, color: newColor });
   }
-  state.selectedCar = undefined;
-  await state.loadCars();
-  renderGaragePage();
+  updateState({ selectedCar: undefined });
+  loadCars();
 };

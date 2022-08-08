@@ -1,19 +1,23 @@
-import { state } from '..';
+import { state, updateState } from '..';
 import { onEngineStartBtnClick, onEngineStopBtnClick } from './startStopEngine';
 
 export const onRaceBtnClick = async (): Promise<void> => {
-  state.race = true;
-  state.cars?.forEach((car) => onEngineStartBtnClick(car.id, car.name));
-
+  updateState({ race: true });
   // Btns
   const raceBtn = document.getElementById('raceBtn') as HTMLButtonElement;
   const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
   raceBtn.setAttribute('disabled', 'disabled');
   resetBtn.removeAttribute('disabled');
+
+  if (state.cars) {
+    await Promise.all(state.cars.map((car) => onEngineStartBtnClick(car.id, car.name)));
+  }
 };
 
 export const onResetBtnClick = async (): Promise<void> => {
-  state.cars?.forEach((car) => onEngineStopBtnClick(car.id));
+  if (state.cars) {
+    await Promise.all(state.cars.map((car) => onEngineStopBtnClick(car.id)));
+  }
 
   // Btns
   const raceBtn = document.getElementById('raceBtn') as HTMLButtonElement;

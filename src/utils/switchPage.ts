@@ -1,27 +1,25 @@
-import { state } from '..';
-import { renderGaragePage } from '../pages/garage/render/renderGaragePage';
-import { renderWinnersPage } from '../pages/winners/render/renderWinnersPage';
+import {
+  loadCars,
+  loadWinners,
+  state, updateState,
+} from '../index';
 
 export const goNextPage = async (): Promise<void> => {
-  state.carsPage += 1;
-  await state.loadCars();
-  renderGaragePage();
+  updateState({ carsPage: state.carsPage += 1 });
+  loadCars();
 };
 
 export const goPrevPage = async (): Promise<void> => {
-  state.carsPage -= 1;
-  await state.loadCars();
-  renderGaragePage();
+  updateState({ carsPage: state.carsPage -= 1 });
+  loadCars();
 };
 
 export const goNextWinPage = async (): Promise<void> => {
-  state.winnersPage += 1;
-  await state.loadCars();
-  renderWinnersPage();
+  updateState({ winnersPage: state.winnersPage += 1 });
+  loadWinners();
 };
 
 export const goPrevWinPage = async (): Promise<void> => {
-  state.winnersPage -= 1;
-  await state.loadCars();
-  renderWinnersPage();
+  updateState({ winnersPage: state.winnersPage -= 1 });
+  loadWinners();
 };

@@ -106,6 +106,7 @@ export const createCarsBlockFragment = (): DocumentFragment => {
   winMessage.id = 'winMessage';
   winMessage.className = 'win-message';
 
+  // Pagination
   const paginationBtnContainer: HTMLDivElement = document.createElement('div');
   paginationBtnContainer.className = 'pagination-container';
   const prevBtn = createButtonElement({
