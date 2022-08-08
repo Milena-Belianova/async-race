@@ -1,13 +1,11 @@
-import { state } from '../../..';
+import { state } from '../../../index';
+import { Car } from '../../../components/api';
 import { createButtonElement } from '../../../components/renderComponents';
+import { removeCar } from '../../../utils/removeCar';
+import { selectCar } from '../../../utils/selectCar';
 import { goNextPage, goPrevPage } from '../../../utils/switchPage';
 
-type Car = {
-  name: string;
-  color: string;
-};
-
-export const createCarFragment = ({ name, color }: Car): DocumentFragment => {
+export const createCarFragment = ({ id, name, color }: Car): DocumentFragment => {
   const fragment: DocumentFragment = document.createDocumentFragment();
 
   const carWrapper: HTMLDivElement = document.createElement('div');
@@ -18,7 +16,9 @@ export const createCarFragment = ({ name, color }: Car): DocumentFragment => {
   firstRow.className = 'car-wrapper__btns-name-row';
 
   const selectBtn = createButtonElement({ id: 'selectBtn', className: 'button', textContent: 'SELECT' });
+  selectBtn.addEventListener('click', () => selectCar(id, name, color));
   const removeBtn = createButtonElement({ id: 'removeBtn', className: 'button', textContent: 'REMOVE' });
+  removeBtn.addEventListener('click', () => removeCar(id));
 
   const carName: HTMLDivElement = document.createElement('div');
   carName.className = 'car-name';
@@ -114,7 +114,7 @@ export const createCarsBlockFragment = (): DocumentFragment => {
     id: 'nextBtn', className: 'button button_color-green', textContent: 'NEXT', attr: { name: 'disabled', value: 'disabled' },
   });
 
-  if (state.carsPage === state.maxCarPages) {
+  if (state.carsPage === state.maxCarPages || state.carsCount === 0) {
     if (!nextBtn.getAttribute('disabled')) {
       nextBtn.setAttribute('disabled', 'disabled');
       nextBtn.removeEventListener('click', () => goNextPage());

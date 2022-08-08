@@ -3,7 +3,9 @@ import {
 } from '../../../components/api';
 import { createButtonElement } from '../../../components/renderComponents';
 import { state } from '../../../index';
-import { goNextPage, goPrevPage } from '../../../utils/switchPage';
+import {
+  goNextWinPage, goPrevWinPage,
+} from '../../../utils/switchPage';
 
 const createTableRow = ({
   id, wins, time, car,
@@ -91,6 +93,7 @@ export const createMainWinnersFragment = (): DocumentFragment => {
   const tableRows = state.winners!.map(createTableRow);
   table.append(tableHeadingRow, ...tableRows);
 
+  // Pagination
   const paginationBtnContainer: HTMLDivElement = document.createElement('div');
   paginationBtnContainer.className = 'pagination-container';
   const prevBtn = createButtonElement({
@@ -100,25 +103,25 @@ export const createMainWinnersFragment = (): DocumentFragment => {
   if (state.winnersPage === 1) {
     if (!prevBtn.getAttribute('disabled')) {
       prevBtn.setAttribute('disabled', 'disabled');
-      prevBtn.removeEventListener('click', () => goPrevPage());
+      prevBtn.removeEventListener('click', () => goPrevWinPage());
     }
   } else {
     prevBtn.removeAttribute('disabled');
-    prevBtn.addEventListener('click', () => goPrevPage());
+    prevBtn.addEventListener('click', () => goPrevWinPage());
   }
 
   const nextBtn = createButtonElement({
     id: 'nextWinBtn', className: 'button button_color-green', textContent: 'NEXT', attr: { name: 'disabled', value: 'disabled' },
   });
 
-  if (state.winnersPage === state.maxWinnersPages) {
+  if (state.winnersPage === state.maxWinnersPages || state.winnersCount === 0) {
     if (!nextBtn.getAttribute('disabled')) {
       nextBtn.setAttribute('disabled', 'disabled');
-      nextBtn.removeEventListener('click', () => goNextPage());
+      nextBtn.removeEventListener('click', () => goNextWinPage());
     }
   } else {
     nextBtn.removeAttribute('disabled');
-    nextBtn.addEventListener('click', () => goNextPage());
+    nextBtn.addEventListener('click', () => goNextWinPage());
   }
 
   paginationBtnContainer.append(prevBtn, nextBtn);
