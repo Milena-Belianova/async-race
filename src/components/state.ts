@@ -3,16 +3,22 @@ import {
   Car, CarBody, WinsCars,
 } from './api';
 
+export type CarView = Car & {
+  isRacing: boolean;
+  position: string;
+}
+
 export class State {
   carsPage = 1;
   maxCarPages = 1;
-  cars: Array<Car> | undefined;
+  cars: Array<CarView> | undefined;
   carsCount = 4;
   winnersPage = 1;
   maxWinnersPages = 1;
   winners: Array<WinsCars> | undefined;
   winnersCount = 1;
-  selectedCar: Car | undefined;
+  winMessage?: {name: string, time: number};
+  selectedCar: CarView | undefined;
   creatingCar: CarBody | undefined;
   view: 'garage' | 'winners' = 'garage';
   race = false;

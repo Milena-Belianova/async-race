@@ -23,16 +23,26 @@ export const updateState = (stateChanges: Partial<State>): void => {
 export const loadCars = async (): Promise<void> => {
   const { items, count } = await getCars(state.carsPage);
   updateState({
-    cars: items,
+    cars: items.map((el) => {
+      const existingCar = state?.cars?.find((car) => car.id === el.id);
+
+      return ({
+        ...el, isRacing: false, position: '0px', ...existingCar,
+      });
+    }),
     carsCount: count,
     maxCarPages: Math.ceil(count / 7),
   });
 };
 
 export const loadWinners = async (): Promise<void> => {
-  const { items, count } = (state.sort && state.order) ? await getWinners({
-    page: state.winnersPage, sort: state.sort, order: state.order,
-  }) : await getWinners({ page: state.winnersPage });
+  const { items, count } = state.sort && state.order
+    ? await getWinners({
+      page: state.winnersPage,
+      sort: state.sort,
+      order: state.order,
+    })
+    : await getWinners({ page: state.winnersPage });
 
   updateState({
     winners: items,

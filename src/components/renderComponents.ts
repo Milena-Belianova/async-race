@@ -2,7 +2,7 @@ type ButtonParams = {
   id?: string,
   className: string,
   textContent?: string,
-  attr?: {name: string, value: string},
+  disabled?: boolean
 }
 
 type InputParams = {
@@ -14,14 +14,14 @@ type InputParams = {
 }
 
 export const createButtonElement = ({
-  id, className, textContent, attr,
+  id, className, textContent, disabled,
 }: ButtonParams): HTMLButtonElement => {
   const el: HTMLButtonElement = document.createElement('button');
   el.id = `${id}`;
   el.className = `${className}`;
   el.textContent = `${textContent}`;
-  if (attr) {
-    el.setAttribute(attr.name, attr.value);
+  if (disabled) {
+    el.setAttribute('disabled', 'disabled');
   }
 
   return el;

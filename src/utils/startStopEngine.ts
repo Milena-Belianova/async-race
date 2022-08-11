@@ -1,34 +1,55 @@
-import { state } from '..';
-import {
-  drive, Engine, startEngine, stopEngine,
-} from '../components/api';
+import { state, updateState } from '..';
+import { drive, Engine, startEngine, stopEngine } from '../components/api';
+import { CarView } from '../components/state';
 import { createNewWinner } from './createWinner';
 
 const timers: Record<number, NodeJS.Timer> = {};
 
 const showWinMessage = (name: string, time: number): void => {
-  const winMessage = document.getElementById('winMessage') as HTMLDivElement;
-  winMessage.textContent = `${name} went first [${time.toFixed(2)}s]!`;
+  updateState({ winMessage: { name, time } });
 };
 
-const startAnimation = (id: number, name: string, velocity: number, distance: number): void => {
-  const carSvgDiv = document.getElementById(`divSvg${id}`) as HTMLDivElement;
-  const carBox = document.getElementById(`carWrapper${id}`) as HTMLDivElement;
-  const boxWidth = carBox.clientWidth;
+export const updateCarInState = (car: CarView, changes: Partial<CarView>, render = true): void => {
+  const carFromState = state.cars?.find((c) => c.id === car.id);
+  const cars = state.cars?.map((c) => (c === carFromState ? { ...carFromState, ...changes } : c));
+
+  if (render) {
+    updateState({
+      cars,
+    });
+  } else {
+    state.cars = cars;
+  }
+};
+
+const stopRacing = (car: CarView): void => {
+  clearInterval(timers[car.id]);
+  updateCarInState(car, { isRacing: false });
+};
+
+// eslint-disable-next-line max-len
+const startAnimation = (car: CarView, velocity: number, distance: number, boxWidth: number): void => {
+  const { id, name } = car;
   const scale = distance / (boxWidth - 200); // масштаб, 1 / px
   const timeInitial = distance / velocity;
 
   const start = Date.now();
-
+  updateCarInState(car, { isRacing: true, position: '1px' });
   timers[id] = setInterval(() => {
     const timePassed = Date.now() - start;
-
-    carSvgDiv.style.left = `${(timePassed * velocity) / scale}px`;
-
-    if (timePassed > timeInitial) {
-      clearInterval(timers[id]);
+    if (timePassed < timeInitial) {
+      const carSvgDiv = document.getElementById(`divSvg${id}`) as HTMLDivElement;
+      // updateCarInState(car, { position: `${(timePassed * velocity) / scale}px` });
+      // eslint-disable-next-line no-param-reassign
+      const nextPosition = `${(timePassed * velocity) / scale}px`;
+      updateCarInState(car, { position: nextPosition }, false);
+      if (carSvgDiv) {
+        carSvgDiv.style.left = nextPosition;
+      }
+    } else {
+      stopRacing(car);
       if (state.race) {
-        const time = (timeInitial / 1000);
+        const time = timeInitial / 1000;
         showWinMessage(name, time);
         state.race = false;
         createNewWinner(id, time);
@@ -37,35 +58,27 @@ const startAnimation = (id: number, name: string, velocity: number, distance: nu
   }, 20);
 };
 
-export const onEngineStartBtnClick = async (id: number, name: string): Promise<void> => {
+export const onEngineStartBtnClick = async (car: CarView): Promise<void> => {
+  const { id } = car;
+  updateCarInState(car, { position: '0px' });
+  const carBox = document.getElementById(`carWrapper${id}`) as HTMLDivElement;
+  const boxWidth = carBox.clientWidth;
   const { velocity, distance }: Engine = await startEngine(id);
 
-  const aBtn = document.getElementById(`aBtn${id}`) as HTMLButtonElement;
-  const bBtn = document.getElementById(`bBtn${id}`) as HTMLButtonElement;
-  aBtn.setAttribute('disabled', 'disabled');
-  bBtn.removeAttribute('disabled');
-
   // car animation starts
-  startAnimation(id, name, velocity, distance);
+  startAnimation(car, velocity, distance, boxWidth);
 
   const driveStatus: { success: boolean } = await drive(id);
   if (!driveStatus.success) {
-    clearInterval(timers[id]);
+    stopRacing(car);
   }
 };
 
-export const onEngineStopBtnClick = async (id: number): Promise<void> => {
-  const carSvgDiv = document.getElementById(`divSvg${id}`) as HTMLDivElement;
-  // UI is waiting for answer for stopping engine
+export const onEngineStopBtnClick = async (car: CarView): Promise<void> => {
+  const { id } = car;
   await stopEngine(id);
 
   // car returned to it's initial place
-  clearInterval(timers[id]);
-  carSvgDiv.style.left = '0';
-
-  // Btns
-  const aBtn = document.getElementById(`aBtn${id}`) as HTMLButtonElement;
-  const bBtn = document.getElementById(`bBtn${id}`) as HTMLButtonElement;
-  bBtn.setAttribute('disabled', 'disabled');
-  aBtn.removeAttribute('disabled');
+  stopRacing(car);
+  updateCarInState(car, { position: '0px' });
 };

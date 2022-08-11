@@ -3,27 +3,16 @@ import { onEngineStartBtnClick, onEngineStopBtnClick } from './startStopEngine';
 
 export const onRaceBtnClick = async (): Promise<void> => {
   updateState({ race: true });
-  // Btns
-  const raceBtn = document.getElementById('raceBtn') as HTMLButtonElement;
-  const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
-  raceBtn.setAttribute('disabled', 'disabled');
-  resetBtn.removeAttribute('disabled');
-
   if (state.cars) {
-    await Promise.all(state.cars.map((car) => onEngineStartBtnClick(car.id, car.name)));
+    await Promise.all(state.cars.map((car) => onEngineStartBtnClick(car)));
   }
 };
 
 export const onResetBtnClick = async (): Promise<void> => {
+  updateState({ race: false });
   if (state.cars) {
-    await Promise.all(state.cars.map((car) => onEngineStopBtnClick(car.id)));
+    await Promise.all(state.cars.map((car) => onEngineStopBtnClick(car)));
   }
 
-  // Btns
-  const raceBtn = document.getElementById('raceBtn') as HTMLButtonElement;
-  const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
-  resetBtn.setAttribute('disabled', 'disabled');
-  raceBtn.removeAttribute('disabled');
-  const winMessage = document.getElementById('winMessage') as HTMLDivElement;
-  winMessage.textContent = '';
+  updateState({ winMessage: undefined });
 };

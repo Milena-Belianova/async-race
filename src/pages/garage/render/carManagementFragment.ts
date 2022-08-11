@@ -53,12 +53,17 @@ export const createCarManagementFragment = (): DocumentFragment => {
   updateBtn.addEventListener('click', () => updateSelectedCar());
 
   // Race, Reset, Generate Cars Btns
-  const raceBtn = createButtonElement({ id: 'raceBtn', className: 'button button_color-green', textContent: 'RACE' });
+  const raceBtn = createButtonElement({
+    id: 'raceBtn',
+    className: 'button button_color-green',
+    textContent: 'RACE',
+    disabled: state.race || state.cars?.some((car) => car.position !== '0px'),
+  });
   const resetBtn = createButtonElement({
     id: 'resetBtn',
     className: 'button button_color-green',
     textContent: 'RESET',
-    attr: { name: 'disabled', value: 'disabled' },
+    disabled: !state.cars?.some((car) => car.position !== '0px'),
   });
   raceBtn.addEventListener('click', () => onRaceBtnClick());
   resetBtn.addEventListener('click', () => onResetBtnClick());

@@ -118,7 +118,7 @@ export const createMainWinnersFragment = (): DocumentFragment => {
   const paginationBtnContainer: HTMLDivElement = document.createElement('div');
   paginationBtnContainer.className = 'pagination-container';
   const prevBtn = createButtonElement({
-    id: 'prevWinBtn', className: 'button button_color-green', textContent: 'PREV', attr: { name: 'disabled', value: 'disabled' },
+    id: 'prevWinBtn', className: 'button button_color-green', textContent: 'PREV', disabled: true,
   });
 
   if (state.winnersPage === 1) {
@@ -132,7 +132,7 @@ export const createMainWinnersFragment = (): DocumentFragment => {
   }
 
   const nextBtn = createButtonElement({
-    id: 'nextWinBtn', className: 'button button_color-green', textContent: 'NEXT', attr: { name: 'disabled', value: 'disabled' },
+    id: 'nextWinBtn', className: 'button button_color-green', textContent: 'NEXT', disabled: true,
   });
 
   if (state.winnersPage === state.maxWinnersPages || state.winnersCount === 0) {

@@ -1,11 +1,12 @@
+import { CarView } from '../components/state';
 import { state, updateState } from '../index';
 
-export const selectCar = (id: number, name: string, color: string): void => {
+export const selectCar = (car: CarView): void => {
   const updateInput = document.getElementById('updateInput') as HTMLInputElement;
   const updateInputColor = document.getElementById('updateInputColor') as HTMLInputElement;
-  updateInput.value = name;
-  updateInputColor.setAttribute('value', `${color}`);
-  updateState({ selectedCar: { id, name, color } });
+  updateInput.value = car.name;
+  updateInputColor.setAttribute('value', `${car.color}`);
+  updateState({ selectedCar: car });
 };
 
 export const updateSelectedCarStateName = (): void => {

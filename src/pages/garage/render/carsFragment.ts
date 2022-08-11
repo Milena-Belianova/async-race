@@ -1,12 +1,13 @@
 import { state } from '../../../index';
-import { Car } from '../../../components/api';
 import { createButtonElement } from '../../../components/renderComponents';
 import { removeCar } from '../../../utils/removeCar';
 import { selectCar } from '../../../utils/selectCar';
 import { goNextPage, goPrevPage } from '../../../utils/switchPage';
 import { onEngineStartBtnClick, onEngineStopBtnClick } from '../../../utils/startStopEngine';
+import { CarView } from '../../../components/state';
 
-export const createCarFragment = ({ id, name, color }: Car): DocumentFragment => {
+export const createCarFragment = (car: CarView): DocumentFragment => {
+  const { id, name, color } = car;
   const fragment: DocumentFragment = document.createDocumentFragment();
 
   const carWrapper: HTMLDivElement = document.createElement('div');
@@ -18,7 +19,7 @@ export const createCarFragment = ({ id, name, color }: Car): DocumentFragment =>
   firstRow.className = 'car-wrapper__btns-name-row';
 
   const selectBtn = createButtonElement({ id: 'selectBtn', className: 'button', textContent: 'SELECT' });
-  selectBtn.addEventListener('click', () => selectCar(id, name, color));
+  selectBtn.addEventListener('click', () => selectCar(car));
   const removeBtn = createButtonElement({ id: 'removeBtn', className: 'button', textContent: 'REMOVE' });
   removeBtn.addEventListener('click', () => removeCar(id));
 
@@ -31,17 +32,27 @@ export const createCarFragment = ({ id, name, color }: Car): DocumentFragment =>
   secondRow.className = 'car-wrapper__car-row';
 
   const aBtn = createButtonElement({
-    id: `aBtn${id}`, className: 'button engine__button', textContent: 'A', attr: { name: 'value', value: 'А' },
+    id: `aBtn${id}`,
+    className: 'button engine__button',
+    textContent: 'A',
+    disabled: car.isRacing || car.position !== '0px',
   });
-  aBtn.addEventListener('click', () => onEngineStartBtnClick(id, name));
+  aBtn.addEventListener('click', () => onEngineStartBtnClick(car));
 
   const bBtn = createButtonElement({
-    id: `bBtn${id}`, className: 'button engine__button engine__button_b', textContent: 'B', attr: { name: 'disabled', value: 'disabled' },
+    id: `bBtn${id}`,
+    className: 'button engine__button engine__button_b',
+    textContent: 'B',
+    disabled: car.position === '0px',
   });
-  bBtn.addEventListener('click', () => onEngineStopBtnClick(id));
+  bBtn.addEventListener('click', () => {
+    console.log('stop!');
+    onEngineStopBtnClick(car);
+  });
 
   const carSvgDiv: HTMLDivElement = document.createElement('div');
   carSvgDiv.id = `divSvg${id}`;
+  carSvgDiv.style.left = car.position;
   carSvgDiv.className = 'car-wrapper__car-svg';
   carSvgDiv.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="80px" height="80px" viewBox="0 0 256 256" xml:space="preserve">
   <defs>
@@ -105,12 +116,18 @@ export const createCarsBlockFragment = (): DocumentFragment => {
   const winMessage: HTMLDivElement = document.createElement('div');
   winMessage.id = 'winMessage';
   winMessage.className = 'win-message';
+  winMessage.textContent = state.winMessage
+    ? `${state.winMessage.name} went first [${state.winMessage.time.toFixed(2)}s]!`
+    : null;
 
   // Pagination
   const paginationBtnContainer: HTMLDivElement = document.createElement('div');
   paginationBtnContainer.className = 'pagination-container';
   const prevBtn = createButtonElement({
-    id: 'prevBtn', className: 'button button_color-green', textContent: 'PREV', attr: { name: 'disabled', value: 'disabled' },
+    id: 'prevBtn',
+    className: 'button button_color-green',
+    textContent: 'PREV',
+    disabled: true,
   });
 
   if (state.carsPage === 1) {
@@ -124,7 +141,10 @@ export const createCarsBlockFragment = (): DocumentFragment => {
   }
 
   const nextBtn = createButtonElement({
-    id: 'nextBtn', className: 'button button_color-green', textContent: 'NEXT', attr: { name: 'disabled', value: 'disabled' },
+    id: 'nextBtn',
+    className: 'button button_color-green',
+    textContent: 'NEXT',
+    disabled: true,
   });
 
   if (state.carsPage === state.maxCarPages || state.carsCount === 0) {

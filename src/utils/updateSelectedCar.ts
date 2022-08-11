@@ -1,5 +1,6 @@
 import { updateCar } from '../components/api';
-import { loadCars, state, updateState } from '../index';
+import { state, updateState } from '../index';
+import { updateCarInState } from './startStopEngine';
 
 export const updateSelectedCar = async (): Promise<void> => {
   const { selectedCar } = state;
@@ -8,8 +9,9 @@ export const updateSelectedCar = async (): Promise<void> => {
     const updateInputColor = document.getElementById('updateInputColor') as HTMLInputElement;
     const newName = updateInput.value;
     const newColor = updateInputColor.value;
-    updateCar(selectedCar?.id, { name: newName, color: newColor });
+    await updateCar(selectedCar?.id, { name: newName, color: newColor });
+    updateCarInState(selectedCar, { name: newName, color: newColor });
   }
+
   updateState({ selectedCar: undefined });
-  loadCars();
 };
