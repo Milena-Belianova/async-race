@@ -1,0 +1,190 @@
+$base-green: rgb(222, 255, 144);
+$base-blue: rgb(192, 228, 235);
+$base-dark: #333;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Aeonis', sans-serif;
+  font-weight: 600;
+  color: $base-dark;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  background-color: $base-dark;
+}
+
+.header {
+  padding: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.button {
+  border-radius: 0.3rem;
+  padding: 0.4rem 1.7rem;
+  cursor: pointer;
+  color: inherit;
+  background-color: $base-blue;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    background-color: rgb(160, 160, 160);
+    transform: none;
+    cursor: initial;
+    color: rgb(99, 99, 99);
+  }
+}
+
+.button_color-green {
+  background-color: $base-green;
+}
+
+.main {
+  padding: 1.5rem;
+}
+
+.car-management-container {
+  width: 400px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 0.5rem;
+
+  .input {
+    width: 45%;
+    border-radius: 0.3rem;
+    padding: 0.3rem 0.4rem;
+    font: inherit;
+    color: inherit;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .input_type-color {
+    border-radius: 0.3rem;
+    border: none;
+  }
+
+  .update__input {
+    background-color: lightgrey;
+  }
+}
+
+.cars-container,
+.winners-container {
+  color: white;
+  padding-top: 3rem;
+
+  .heading {
+    font-size: 2rem;
+  }
+
+  .page {
+    font-size: 1.2rem;
+    padding: 0.5rem 0;
+  }
+}
+
+.winners-container {
+  padding-top: 0;
+}
+
+.car-wrapper {
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .car-wrapper__btns-name-row {
+    color: $base-dark;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .car-name {
+      margin-left: 1rem;
+      color: $base-green;
+      font-size: 1rem;
+    }
+  }
+
+  .car-wrapper__car-row {
+    height: 3.5rem;
+    border-bottom: 1px dashed white;
+    display: flex;
+    gap: 0.35rem;
+
+    .engine__button {
+      background-color: transparent;
+      border: 1px solid $base-green;
+      padding: 0.4rem 0.5rem;
+      position: relative;
+      height: 2rem;
+      width: 1.7rem;
+
+      &:disabled {
+        color: rgb(130, 130, 130);
+        border: 1px solid rgb(130, 130, 130);
+      }
+    }
+
+    .engine__button_b {
+      border: 1px solid rgb(208, 27, 27);
+    }
+
+    .car-wrapper__car-svg {
+      margin-left: 1rem;
+      position: relative;
+    }
+
+    .car-wrapper__flag-svg {
+      margin-left: auto;
+      margin-right: 8rem;
+    }
+  }
+}
+
+.pagination-container {
+  color: $base-dark;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.table {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 1.5rem;
+
+  .table__sell {
+    padding: 0 1rem;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .table__heading-sell {
+    padding: 0.3rem 1rem;
+    font-weight: 600;
+    background-color: rgb(75, 75, 235);
+  }
+}
+
+.win-message {
+  position: absolute;
+  top: 50%;
+  margin-top: -2.18rem;
+  left: 50%;
+  margin-left: -13rem;
+  padding: 1rem;
+  font-size: 2rem;
+  text-shadow: 5px 5px 10px #00FF00, -5px -5px 10px #00FF00;
+}
